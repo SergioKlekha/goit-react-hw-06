@@ -1,27 +1,34 @@
-import { Formik, Form } from "formik";
-import css from "./SearchBox.module.css";
+import React from 'react';
+import s from './SearchBox.module.css';
+import { Field, Form, Formik } from 'formik';
+import { FiSearch } from 'react-icons/fi';
+import { useDispatch } from 'react-redux';
+import { changeFilter } from '../../redux/contacts/filterSlice';
 
-
-
-const SearchBox = ({value, onFilter}) => {
-
-    return (
-        <Formik>
-            <Form className={css.form}>
-                <label  htmlFor="" 
-                        className={css.label}>
-                    Find contact by form
-                            </label>
-
-                <input  type="text" 
-                        className={css.input}
-                        value={value}
-                        onChange={(event) => onFilter(event.target.value)}
-                            />
-            </Form>
-        </Formik>
-    );
+const SearchBox = () => {
+  const dispatch = useDispatch();
+  const initialValues = { filter: '' };
+  const onSubmit = (values, options) => {
+    dispatch(changeFilter(values.filter));
+    options.resetForm();
+  };
+  return (
+    <div className={s.boxWraper}>
+      <Formik initialValues={initialValues} onSubmit={onSubmit}>
+        <Form className={s.form}>
+          <Field
+            className={s.input}
+            name="filter"
+            placeholder="Search for..."
+          />
+          <button type="submit" className={s.searchBtn}>
+            <FiSearch />
+            Search
+          </button>
+        </Form>
+      </Formik>
+    </div>
+  );
 };
-
 
 export default SearchBox;

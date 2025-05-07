@@ -1,23 +1,25 @@
-import css from "./Contact.module.css"
-import { FiUser, FiPhone } from "react-icons/fi";
+import React from 'react';
+import s from './Contact.module.css';
+import { useDispatch } from 'react-redux';
+import { deleteContact } from '../../redux/contacts/contactSlise';
+import { RxCross2 } from 'react-icons/rx';
 
-const Contact = ({name, number, onDelete}) => {
-
-    return (
-        <div className={css.block}>
-        <li className={css.list}>
-            <div className={css.iconText}>
-                <FiUser className={css.icon}/>
-                <p>{name}</p>
-            </div>
-            <div className={css.iconText}>
-                <FiPhone className={css.icon}/>
-                <p>{number}</p>
-            </div>
-        </li>
-        <button className={css.button} onClick={onDelete}>Delete</button>
-        </div>
-    );
+const Contact = ({ item }) => {
+  const dispatch = useDispatch();
+  return (
+    <div className={s.contactWraper}>
+      <div className={s.infoWrapper}>
+        <p className={s.nameBox}>{item.name}</p>
+        <p className={s.numberBox}>{item.number}</p>
+      </div>
+      <button
+        className={s.deleteBtn}
+        onClick={() => dispatch(deleteContact(item.id))}
+      >
+        <RxCross2 />
+      </button>
+    </div>
+  );
 };
 
 export default Contact;

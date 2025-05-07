@@ -1,89 +1,75 @@
-import { Formik, Form, Field, ErrorMessage} from "formik";
-import { FiUser, FiPhone } from "react-icons/fi";
-import * as Yup from "yup";
-import css from "./ContactForm.module.css"
-import { nanoid } from "nanoid";
+import React, { useState } from 'react';
+import s from './ContactForm.module.css';
+import { Field, Form, Formik } from 'formik';
+import { CiCirclePlus } from 'react-icons/ci';
+import { useDispatch } from 'react-redux';
+import { addContact } from '../../redux/contacts/contactSlise';
+import { nanoid } from '@reduxjs/toolkit';
+import * as Yup from 'yup';
+import { ErrorMessage } from 'formik';
 
+const ContactSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(4, 'To short!')
+    .max(20, 'To long!')
+    .required('Please, enter a valid name'),
+  number: Yup.string()
+    .matches(/^\d+$/, 'Only digits please')
+    .min(10, 'To short')
+    .max(11, 'To long')
+    .required('Please, enter a valid phone number'),
+});
 
-
-
-const ContactForm = ({onAdd}) => {
-    const ContactSchema = Yup.object().shape({
-        name:   Yup.string().min(3, 'Too Short!')
-                                .max(50, 'Too Long')
-                                .required('Required'), 
-        number:  Yup.string().min(3, 'Too Short!')
-                                .max(50, 'Too Long')
-                                .required('Required'),
-    });
-    return (
-        <Formik initialValues={{name: "", 
-                                number: "" }}
-                validationSchema={ContactSchema}
-
-                onSubmit={(data, actions) => {
-                    actions.resetForm();
-                    onAdd({
-                        id: nanoid(),
-                        name: data.name,
-                        number: data.number,
-                    });
-                    console.log(data);
-                    
-        }}>
-            
-            <Form className={css.form}>
-                <div className={css.blockForm}>
-
-                    <label  
-                        htmlFor="name" 
-                        className={css.label}>Name</label>
-
-                    <FiUser 
-                        className={css.icon}/>
-
-                    <Field  
-                        type="text" 
-                        name="name"  
-                        className={css.input} 
-                        autoComplete="off"
-                        placeholder="User Name"
-                        />
-
-                    <ErrorMessage    
-                        name="name" 
-                        component="span" 
-                        className={css.error}/>
-                </div>
-
-                <div className={css.blockForm}>
-
-                    <label 
-                        htmlFor="number" 
-                        className={css.label}>Number</label>
-
-                    <FiPhone 
-                        className={css.icon}/>
-
-                    <Field 
-                        type="text" 
-                        name="number" 
-                        className={css.input} 
-                        autoComplete="off"
-                        placeholder="User Number"
-                        /> 
-
-                    <ErrorMessage 
-                        name="number" 
-                        component="span" 
-                        className={css.error}/>
-                </div>
-                <button 
-                        type="submit" 
-                        className={css.button}>Add contact</button>
-            </Form>
-        </Formik>
-    );
+const ContactForm = () => {
+  const dispatch = useDispatch();
+  const initialValues = { name: '', number: '' };
+  const onSubmit = (values, options) => {
+    const newContact = {
+      id: nanoid(),
+      name: values.name,
+      number: values.number,
+    };
+    dispatch(addContact(newContact));
+    options.resetForm();
+  };
+  return (
+    <div className={s.formWraper}>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+        validationSchema={ContactSchema}
+      >
+        <Form className={s.form}>
+          <Field
+            className={s.input}
+            type="text"
+            name="name"
+            placeholder="Enter contact's name"
+          />
+          <ErrorMessage
+            className={s.ErrorMessage}
+            name="name"
+            component="span"
+          />
+          <Field
+            className={s.input}
+            type="number"
+            name="number"
+            placeholder="Enter contact's phone number"
+          />
+          <ErrorMessage
+            className={s.ErrorMessage}
+            name="number"
+            component="span"
+          />
+          <button type="submit" className={s.addBtn}>
+            <CiCirclePlus />
+            Add contact
+          </button>
+        </Form>
+      </Formik>
+    </div>
+  );
 };
 
 export default ContactForm;
