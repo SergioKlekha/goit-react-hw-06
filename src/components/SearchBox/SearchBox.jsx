@@ -3,7 +3,7 @@ import s from './SearchBox.module.css';
 import { Field, Form, Formik } from 'formik';
 import { FiSearch } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
-import { changeFilter } from '../../redux/contacts/filterSlice';
+import { changeFilter } from '../../redux/filterSlice';
 
 const SearchBox = () => {
   const dispatch = useDispatch();

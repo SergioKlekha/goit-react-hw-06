@@ -3,7 +3,7 @@ import s from './ContactForm.module.css';
 import { Field, Form, Formik } from 'formik';
 import { CiCirclePlus } from 'react-icons/ci';
 import { useDispatch } from 'react-redux';
-import { addContact } from '../../redux/contacts/contactSlise';
+import { addContact } from '../../redux/contactSlise';
 import { nanoid } from '@reduxjs/toolkit';
 import * as Yup from 'yup';
 import { ErrorMessage } from 'formik';
