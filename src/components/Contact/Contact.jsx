@@ -1,7 +1,7 @@
 import React from 'react';
 import s from './Contact.module.css';
 import { useDispatch } from 'react-redux';
-import { deleteContact } from '../../redux/contactSlise';
+import { deleteContact } from '../../redux/contactsSlise';
 import { RxCross2 } from 'react-icons/rx';
 
 const Contact = ({ item }) => {
